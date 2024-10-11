@@ -11,6 +11,10 @@ function getTimeString (time){
 
 console.log(getTimeString(4395));
 
+const removeActionClass=()=>{
+
+}
+
 // fetch , load and show catagories on display
 
 
@@ -135,7 +139,7 @@ const displayCatagory =(categories)=> {
 
         //create a button
         const buttonContainer=document.createElement('div')
-        buttonContainer.innerHTML=` <button id="btn-${item.category_id}" onclick="loadCategoryVideo(${item.category_id})" class="btn">
+        buttonContainer.innerHTML=` <button id="btn-${item.category_id}" onclick="loadCategoryVideo(${item.category_id})" class="btn catagory-btn">
             ${item.category}
         </button>`
        
