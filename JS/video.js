@@ -12,6 +12,11 @@ function getTimeString (time){
 console.log(getTimeString(4395));
 
 const removeActionClass=()=>{
+const buttons=document.getElementsByClassName("catagory-btn")
+console.log(buttons);
+for(btn of buttons){
+    btn.classList.remove("active")
+}
 
 }
 
@@ -28,8 +33,8 @@ const loadCatagory =()=> {
 }
 
 //create load video catagories
-const videoCatagory =()=> {
-    fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
+const videoCatagory =(searchText = "")=> {
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
     .then(res => res.json())
     .then(data =>displayVideos(data.videos))
     .catch(error => console.log(error))
@@ -43,6 +48,10 @@ const loadCategoryVideo = (id) =>{
     fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then(res => res.json())
     .then(data => {
+        //remove active button
+        removeActionClass()
+
+
         const activeBtn=document.getElementById(`btn-${id}`)
         // console.log(activeBtn);
         
@@ -50,6 +59,34 @@ const loadCategoryVideo = (id) =>{
         displayVideos(data.category)})
     .catch(error => console.log(error))
     
+}
+
+const loadDetails=async (videoId)=>{
+    console.log(videoId);
+    const url=`https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`
+    const res = await fetch(url)
+    const data =await res.json()
+    // console.log(data);
+
+    displayDetails(data.video)
+    
+    
+
+}
+
+const displayDetails=(video)=>{
+    console.log(video);
+    const detailsContainer=document.getElementById('modal-content')
+
+    // way-1 to dispaly modal
+    document.getElementById("showModalData").click()
+
+    detailsContainer.innerHTML=`<img src=${video.thumbnail}/>
+    <p>${video.description}</p>
+    `
+
+    
+
 }
 
 // card demo
@@ -116,7 +153,9 @@ const displayVideos=(videos)=>{
 
         ${video.authors[0].verified == true ? ` <img class="w-5" src="https://img.icons8.com/?size=60&id=lalayI2ulYNt&format=png"/>` : ""}
        </div>
-        <p></p>
+        <p>
+        <button onclick="loadDetails('${video.video_id}')" class="btn btn-sm btn-error">details</button>
+        </p>
         </div>
       </div>`
     
@@ -156,6 +195,12 @@ const displayCatagory =(categories)=> {
     
 }
 
+
+document.getElementById("search-box").addEventListener("keyup",(e)=>{
+    // console(e.target.value);
+    videoCatagory(e.target.value)
+    
+})
 loadCatagory()
 videoCatagory()
 
